@@ -1,0 +1,41 @@
+  /* Conteúdo do cartão */
+  .br-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem; /* Espaçamento interno generoso */
+  }
+
+/* Botão de login em azul e branco */
+.br-button {
+  margin-top: 1rem;
+  width: auto; /* Muda de 90% para auto */
+  min-width: 200px; /* Largura mínima confortável */
+  max-width: 350px; /* Aumenta um pouco o máximo */
+  background-color: #005ea2;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2.5rem; /* Aumenta padding lateral (antes 1.8rem) */
+  border-radius: 8px; /* MUDA de 25px para 8px - menos "bolado" */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  display: inline-flex; /* Muda de flex para inline-flex */
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap; /* IMPEDE quebra de linha do texto */
+
+  &:hover {
+    background-color: #004080;
+    color: #fff;
+  }
+
+  &:active {
+    background-color: #003366;
+    color: #fff;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 94, 162, 0.3);
+  }
+}

@@ -1,0 +1,77 @@
+<!-- src/app/app.component.html -->
+<div style="max-width: 500px; margin: 40px auto; font-family: Arial, sans-serif;">
+  <img src="/assets/images/logo_anvisa.png" alt="ANVISA">
+  <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; flex-wrap: wrap;">
+      <h2 style="color: #003366; margin: 0; white-space: nowrap;">Emissor de Receita Branca (Exemplo)</h2>
+      
+      <div style="width: 100%;">
+        <div class="br-card-content" title="Clique no botão acima para acessar a API SNCR ou cadastrar sua senha de acesso.&#10;&#10; Não forneça sua senha para outra pessoa. Ela é individual e intransferível.">
+          <button *ngIf="!autenticado" class="br-button" type="button" (click)="fazerLogin()">
+            Entrar com <span class="gov-br-bold">gov.br</span>
+          </button>
+          <span *ngIf="!autenticado" style="color: #dc2626; font-size: 13px; margin-top: 10px; white-space: nowrap;">⚠️ Não autenticado</span>
+          
+          <button *ngIf="autenticado" (click)="fazerLogout()" class="br-button">Sair</button>
+          <span *ngIf="autenticado"  style="color: #059669; font-size: 13px; margin-top: 10px; white-space: nowrap;">✅ Autenticado</span>
+        </div>
+      </div>
+    </div>
+    
+    <form (ngSubmit)="enviar()">
+      
+      <!-- Tipo de Receita -->
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Tipo de Receita</label>
+        <select [(ngModel)]="filtro.tipo" name="tipo" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required>
+          <option value="RCE">RCE (Receita de Controle Especial)</option>
+          <option value="RET">RET (Receita Especial de Talidomida)</option>
+        </select>
+      </div>
+
+      <!-- Conselho -->
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Conselho</label>
+        <input type="text" [(ngModel)]="filtro.conselho" name="conselho" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required />
+      </div>
+
+      <!-- Documento do Prescritor -->
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Documento do Prescritor</label>
+        <input type="text" [(ngModel)]="filtro.documento" name="documento" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required />
+      </div>
+
+      <!-- UF -->
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">UF</label>
+        <input type="text" [(ngModel)]="filtro.uf" name="uf" style="width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required />
+      </div>
+
+      <!-- ⭐ Botão com estado de loading (melhorado) -->
+      <button type="submit" [disabled]="carregando || !autenticado" style="background-color: #003366; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; opacity: {{ (carregando || !autenticado) ? 0.7 : 1 }};">
+        {{ carregando ? 'Processando...' : 'Enviar para o Back-end' }}
+      </button>
+    </form>
+
+    <!-- ⭐ Indicador de loading (opcional) -->
+    <div *ngIf="carregando" style="margin-top: 15px; text-align: center; color: #666;">
+      <span>🔄 Aguardando resposta do servidor...</span>
+    </div>
+
+    <!-- Exibição de logs e retornos da API (Sucesso ou Erro Estilizado) -->
+    <div *ngIf="resultado" [ngStyle]="{
+      'margin-top': '20px',
+      'padding': '15px',
+      'border-radius': '4px',
+      'background-color': statusResultado === 'sucesso' ? '#def7ec' : '#fde8e8',
+      'color': statusResultado === 'sucesso' ? '#03543f' : '#9b1c1c',
+      'border': statusResultado === 'sucesso' ? '1px solid #bcf0da' : '1px solid #f8b4b4'
+    }">
+      <strong style="display: block; margin-bottom: 5px;">
+        {{ statusResultado === 'sucesso' ? '✅ Sucesso! Resposta da API:' : '❌ Erro na Requisição:' }}
+      </strong>
+      <pre style="white-space: pre-wrap; margin: 0; font-family: monospace; font-size: 12px;">{{ resultado | json }}</pre>
+    </div>
+  </div>
+</div>
